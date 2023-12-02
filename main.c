@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
+#include <sys/time.h> //for timeval, fd_set, tv_sec, tv_usec
 
 #define COLS 60
 #define ROWS 30
@@ -48,8 +49,26 @@ int main() {
 		y[head] = ROWS / 2;
 		int gameover = 0;
 		int xdir = 1, ydir = 0;
+		int applex = -1, appley;
 
 		while(!quit && !gameover) {
+			if (applex < 0) {
+				//create new apple
+				applex = rand() % COLS;
+				appley = rand() % ROWS;
+
+				for (int i = tail; i != head; i = (i + 1) % 1000) {
+					if (x[i] == applex && y[i] == appley) {
+						applex = -1;
+					}
+				}
+				if (applex >= 0) {
+					//draw apple
+					printf("\e[%iB\e[%iCo", appley + 1, appley + 1);
+					printf("\e[%iF", appley + 1);
+				}
+			}
+
 			//clear snake tail
 			printf("\e[%iB\e[%iC ", y[tail] + 1, x[tail] + 1);
 			printf("\e[%iF", y[tail] + 1);
