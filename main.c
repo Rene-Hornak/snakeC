@@ -4,8 +4,9 @@
 #include <termios.h>
 #include <sys/time.h> //for timeval, fd_set, tv_sec, tv_usec
 
-#define COLS 60
-#define ROWS 30
+//field width and height
+#define COLS 20 //recommended 60
+#define ROWS 10 //recommended 30
 
 int main() {
 	//hide cursor
@@ -98,6 +99,7 @@ int main() {
 			printf("\e[%iF", y[head] + 1);
 			fflush(stdout);
 
+			//game speed recommended 5
 			usleep(5 * 1000000 / 60);
 
 			//read keyword
